@@ -40,8 +40,8 @@ public abstract class Animal {
         this.alive = alive;
     }
 
-    abstract void eat();
-    abstract void reproduction();
-    abstract void movement();
+    public abstract void eat();
+    public abstract void reproduction();
+    public abstract void movement();
 
 }
