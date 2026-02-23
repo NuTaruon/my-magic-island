@@ -1,4 +1,4 @@
-package org.magicisland;
+
 
 
 public class Main {
