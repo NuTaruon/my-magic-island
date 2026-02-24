@@ -1,47 +1,24 @@
 package animals;
 
 public abstract class Animal {
-    private final int weight;
-    private final int speed;
-    private final int maxSaturation;
-    private int saturation;
-    private boolean alive = true;
+    protected final double weight;
+    protected final int speed;
+    protected final int maxSaturation;
+    protected int saturation;
+    protected boolean alive = true;
 
-    public Animal(int maxSaturation, int saturation, int speed, int weight) {
+    public Animal(int maxSaturation, int saturation, int speed, double weight) {
         this.maxSaturation = maxSaturation;
         this.saturation = saturation;
         this.speed = speed;
         this.weight = weight;
     }
 
-    public int getMaxSaturation() {return maxSaturation;}
-
-    public int getWeight() {
-        return weight;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public int getSaturation() {
-        return saturation;
-    }
-
-    public void setSaturation(int saturation) {
-        this.saturation = saturation;
-    }
-
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-
     public abstract void eat();
     public abstract void reproduction();
     public abstract void movement();
 
+    public void die(){
+        alive = false;
+    }
 }
