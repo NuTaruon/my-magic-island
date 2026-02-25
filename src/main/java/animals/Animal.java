@@ -1,20 +1,37 @@
 package animals;
 
+import model.Location;
+
+
 public abstract class Animal {
-    protected final double weight;
-    protected final int speed;
-    protected final int maxSaturation;
-    protected int saturation;
+
+    protected final double WEIGHT;
+    protected final int SPEED;
+    protected final double MAX_SATURATION;
+    protected double saturation;
     protected boolean alive = true;
 
-    public Animal(int maxSaturation, int saturation, int speed, double weight) {
-        this.maxSaturation = maxSaturation;
-        this.saturation = saturation;
-        this.speed = speed;
-        this.weight = weight;
+
+    public Animal(double WEIGHT, int SPEED, double MAX_SATURATION) {
+        this.WEIGHT = WEIGHT;
+        this.SPEED = SPEED;
+        this.MAX_SATURATION = MAX_SATURATION;
+        this.saturation = MAX_SATURATION;
     }
 
-    public abstract void eat();
+    public double getWeight() {
+        return WEIGHT;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public abstract void eat(Location location);
     public abstract void reproduction();
     public abstract void movement();
 
