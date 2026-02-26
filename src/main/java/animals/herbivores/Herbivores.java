@@ -7,8 +7,8 @@ import plants.Plants;
 
 public abstract class Herbivores extends Animal {
 
-    public Herbivores(double WEIGHT, int SPEED, double MAX_SATURATION) {
-        super(WEIGHT, SPEED, MAX_SATURATION);
+    public Herbivores(double WEIGHT, int SPEED, double MAX_SATURATION, int MAX_POPULATION_ONE_LOCATION) {
+        super(WEIGHT, SPEED, MAX_SATURATION, MAX_POPULATION_ONE_LOCATION);
     }
 
     @Override
