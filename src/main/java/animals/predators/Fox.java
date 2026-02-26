@@ -1,4 +1,4 @@
-package animals.predator;
+package animals.predators;
 
 import animals.Animal;
 import animals.herbivores.*;

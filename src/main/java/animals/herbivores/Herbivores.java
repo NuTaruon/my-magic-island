@@ -2,7 +2,7 @@ package animals.herbivores;
 
 import animals.Animal;
 import model.Location;
-import plants.Plants;
+import plants.Plant;
 
 
 public abstract class Herbivores extends Animal {
@@ -15,8 +15,8 @@ public abstract class Herbivores extends Animal {
     public void eat(Location location) {
         if(!alive)
             return;
-        Plants plant = location.removePlant();
+        Plant plant = location.removePlant();
         if(plant != null)
-            saturation = Math.min(MAX_SATURATION, saturation + 1);
+            saturation = Math.min(MAX_SATURATION, saturation + plant.getWeight());
     }
 }

@@ -1,6 +1,6 @@
 package plants;
 
-public class Plants {
+public class Plant {
     private boolean alive = true;
     private final double weight = 1;
 
@@ -10,5 +10,9 @@ public class Plants {
 
     public void setAlive(boolean alive) {
         this.alive = alive;
+    }
+
+    public double getWeight() {
+        return weight;
     }
 }

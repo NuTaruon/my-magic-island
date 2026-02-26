@@ -1,7 +1,7 @@
 package model;
 
 import animals.Animal;
-import plants.Plants;
+import plants.Plant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.List;
  **/
 public class Location {
     private final List<Animal> animals = new ArrayList<>();
-    private final List<Plants> plants = new ArrayList<>();
+    private final List<Plant> plants = new ArrayList<>();
 
-    public List<Plants> getPlants() {
+    public List<Plant> getPlants() {
         return plants;
     }
 
@@ -29,12 +29,12 @@ public class Location {
         animals.remove(animal);
     }
 
-    public void addPlant(Plants plant){
+    public void addPlant(Plant plant){
         plants.add(plant);
     }
 
     // Однопоток
-    public Plants removePlant(){
+    public Plant removePlant(){
         if(!plants.isEmpty()){
             return plants.remove(plants.size() -1);
         }
