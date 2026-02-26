@@ -16,7 +16,7 @@ public class SimpleSimulation {
 
     public void initialization() {
         island = new Island(simulationConfig.getISLAND_WIDTH(),simulationConfig.getISLAND_HEIGHT());
-        System.out.println(Animal.class.getClasses());
+
 
         for (int i = 0; i < simulationConfig.getInitialPopulationWolf(); i++) {
             int x = ThreadLocalRandom.current().nextInt(island.getWidth());
