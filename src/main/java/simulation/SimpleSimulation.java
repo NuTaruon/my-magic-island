@@ -8,6 +8,7 @@ import model.Island;
 import model.Location;
 import plants.Plant;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SimpleSimulation {
@@ -106,4 +107,58 @@ public class SimpleSimulation {
 
     }
 
+    public void tick() {
+        for (int x = 0; x < island.getWidth(); x++) {
+            for (int y = 0; y < island.getHeight(); y++) {
+                Location location = island.getLocation(x, y);
+                for (int i = 0; i < simulationConfig.getPlantsCell(); i++) {
+                    location.addPlant(new Plant());
+                }
+            }
+        }
+
+        for (int x = 0; x < island.getWidth(); x++) {
+            for (int y = 0; y < island.getHeight(); y++) {
+               Location location = island.getLocation(x,y);
+               List<Animal> animals = List.copyOf(location.getAnimals());
+               for (Animal animal: animals){
+                   if(!animal.isAlive())
+                       continue;
+
+                   if(animal.getSaturation() > 0) {
+                       animal.movement();
+                       if(animal.getMAX_SATURATION()/animal.getSaturation() >=2) {
+                           animal.eat(location);
+                       }
+                       animal.reproduction(location);
+                       animal.setSaturation(animal.getSaturation()-(animal.getMAX_SATURATION()*10/100));
+                   } else {
+                       animal.die();
+                       location.removeAnimal(animal);
+                   }
+               }
+            }
+        }
+        printStatistic();
+    }
+    private void printStatistic(){
+        //todo Дописать
+    }
+
+    public void run(int tick){
+        for (int i = 0; i < tick; i++) {
+            tick();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        SimpleSimulation simpleSimulation = new SimpleSimulation();
+        simpleSimulation.initialization();
+        simpleSimulation.run(5);
+    }
 }

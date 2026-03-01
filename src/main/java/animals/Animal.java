@@ -25,6 +25,18 @@ public abstract class Animal {
         return MAX_POPULATION_ONE_LOCATION;
     }
 
+    public double getSaturation() {
+        return saturation;
+    }
+
+    public double getMAX_SATURATION() {
+        return MAX_SATURATION;
+    }
+
+    public void setSaturation(double saturation) {
+        this.saturation = saturation;
+    }
+
     public double getWeight() {
         return WEIGHT;
     }
@@ -33,13 +45,13 @@ public abstract class Animal {
         return alive;
     }
 
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-
     public abstract void eat(Location location);
-    public abstract void reproduction(Location location);
-    public abstract void movement();
+    public void reproduction(Location location){
+
+    }
+    public  void movement() {
+
+    }
 
     public void die(){
         alive = false;

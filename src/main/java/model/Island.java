@@ -23,7 +23,7 @@ public class Island {
     public Location getLocation(int x, int y){
         if(x < 0 || x >= width || y < 0 || y >= height)
             throw  new IllegalArgumentException("Выход за координаты острова");
-        return locations[x][y];
+        return locations[y][x];
     }
 
     public int getHeight() {
