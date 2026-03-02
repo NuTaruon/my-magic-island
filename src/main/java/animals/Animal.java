@@ -2,6 +2,9 @@ package animals;
 
 import model.Location;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.ThreadLocalRandom;
+
 
 public abstract class Animal {
 
@@ -11,6 +14,8 @@ public abstract class Animal {
     protected final int MAX_POPULATION_ONE_LOCATION;
     protected double saturation;
     protected boolean alive = true;
+    private final int CHANGE_REPRODUCTION = 50;
+
 
 
     public Animal(double WEIGHT, int SPEED, double MAX_SATURATION, int MAX_POPULATION_ONE_LOCATION) {
@@ -47,7 +52,21 @@ public abstract class Animal {
 
     public abstract void eat(Location location);
     public void reproduction(Location location){
-
+        if(!alive)
+            return;
+        long countAnimalLocation = location.getAnimals().stream()
+                .filter(a -> a.getClass() == this.getClass() && a!= this && a.isAlive())
+                .count();
+        if(countAnimalLocation > 0 && ThreadLocalRandom.current().nextInt(100) < CHANGE_REPRODUCTION) {
+            try {
+                Animal baby = this.getClass().getDeclaredConstructor().newInstance();
+                baby.setSaturation(baby.MAX_SATURATION / 2);
+                location.addAnimal(baby);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                     NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
     public  void movement() {
 
