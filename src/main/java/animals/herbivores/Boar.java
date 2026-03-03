@@ -13,13 +13,4 @@ public class Boar extends Herbivores{
         super(WEIGHT, SPEED, MAX_SATURATION, MAX_POPULATION_ONE_LOCATION);
     }
 
-    @Override
-    public void reproduction(Location location) {
-
-    }
-
-    @Override
-    public void movement() {
-
-    }
 }

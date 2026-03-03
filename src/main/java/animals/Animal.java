@@ -1,5 +1,6 @@
 package animals;
 
+import model.Island;
 import model.Location;
 
 import java.lang.reflect.InvocationTargetException;
@@ -15,6 +16,7 @@ public abstract class Animal {
     protected double saturation;
     protected boolean alive = true;
     private final int CHANGE_REPRODUCTION = 50;
+    protected volatile Location curentLocation;
 
 
 
@@ -51,6 +53,7 @@ public abstract class Animal {
     }
 
     public abstract void eat(Location location);
+
     public void reproduction(Location location){
         if(!alive)
             return;
@@ -68,8 +71,43 @@ public abstract class Animal {
             }
         }
     }
-    public  void movement() {
+    public  void movement(Island island, int currentX, int currentY) {
+      if(!alive)
+          return;
 
+      if(curentLocation == null)
+          return;
+
+       int direction = ThreadLocalRandom.current().nextInt(4);
+       int newX = currentX;
+       int newY = currentY;
+
+       switch (direction){
+           case 0:
+               //Вверх Y
+               newY = Math.min(0, currentY - 1);
+               break;
+           case 1:
+               //Вправо X
+               newX = Math.min(island.getWidth()-1, currentX + 1);
+               break;
+           case 2:
+               //Вниз Y
+               newY = Math.min(island.getHeight()-1, currentY + 1);
+               break;
+           case 3:
+               //Влево X
+               newX = Math.min(0, currentY -1 );
+               break;
+       }
+    }
+
+    public Location getCurentLocation() {
+        return curentLocation;
+    }
+
+    public void setCurentLocation(Location curentLocation) {
+        this.curentLocation = curentLocation;
     }
 
     public void die(){

@@ -23,6 +23,7 @@ public class Location {
 
     public void addAnimal(Animal animal){
         animals.add(animal);
+        animal.setCurentLocation(this);
     }
 
     public void removeAnimal(Animal animal){
