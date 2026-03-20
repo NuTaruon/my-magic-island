@@ -15,17 +15,29 @@ public abstract class Animal {
     protected final int MAX_POPULATION_ONE_LOCATION;
     protected double saturation;
     protected boolean alive = true;
-    private final int CHANGE_REPRODUCTION = 50;
+    private boolean isMoved = false;
+    private final int CHANGE_REPRODUCTION;
     protected volatile Location curentLocation;
 
 
 
-    public Animal(double WEIGHT, int SPEED, double MAX_SATURATION, int MAX_POPULATION_ONE_LOCATION) {
+
+    public Animal(double WEIGHT, int SPEED, double MAX_SATURATION, int MAX_POPULATION_ONE_LOCATION, int CHANGE_REPRODUCTION) {
         this.WEIGHT = WEIGHT;
         this.SPEED = SPEED;
         this.MAX_SATURATION = MAX_SATURATION;
         this.saturation = MAX_SATURATION;
         this.MAX_POPULATION_ONE_LOCATION = MAX_POPULATION_ONE_LOCATION;
+        this.CHANGE_REPRODUCTION = CHANGE_REPRODUCTION;
+
+    }
+
+    public boolean isMoved() {
+        return isMoved;
+    }
+
+    public void setMoved(boolean moved) {
+        isMoved = moved;
     }
 
     public int getMAX_POPULATION_ONE_LOCATION() {
@@ -60,7 +72,7 @@ public abstract class Animal {
         long countAnimalLocation = location.getAnimals().stream()
                 .filter(a -> a.getClass() == this.getClass() && a!= this && a.isAlive())
                 .count();
-        if(countAnimalLocation > 0 && ThreadLocalRandom.current().nextInt(100) < CHANGE_REPRODUCTION) {
+        if(countAnimalLocation > 0 && countAnimalLocation < MAX_POPULATION_ONE_LOCATION && ThreadLocalRandom.current().nextInt(100) < CHANGE_REPRODUCTION) {
             try {
                 Animal baby = this.getClass().getDeclaredConstructor().newInstance();
                 baby.setSaturation(baby.MAX_SATURATION / 2);
@@ -71,7 +83,7 @@ public abstract class Animal {
             }
         }
     }
-    public  void movement(Island island, int currentX, int currentY) {
+    public void movement(Island island, int currentX, int currentY) {
       if(!alive)
           return;
 
@@ -81,10 +93,10 @@ public abstract class Animal {
        int direction = ThreadLocalRandom.current().nextInt(4);
        int newX = currentX;
        int newY = currentY;
-
        switch (direction){
            case 0:
                //Вверх Y
+
                newY = Math.min(0, currentY - 1);
                break;
            case 1:
@@ -100,6 +112,14 @@ public abstract class Animal {
                newX = Math.min(0, currentY -1 );
                break;
        }
+       try {
+           if((newX >= 0 && newX <= island.getWidth()-1) && (newY >= 0 && newY <= island.getHeight()-1)) {
+               island.getLocation(newX, newY).addAnimal(this);
+               island.getLocation(currentX, currentY).removeAnimal(this);
+           }
+       } catch (IllegalArgumentException e){
+           System.out.println("Ошибка перемещения!");
+       }
     }
 
     public Location getCurentLocation() {
@@ -110,7 +130,7 @@ public abstract class Animal {
         this.curentLocation = curentLocation;
     }
 
-    public void die(){
+    public void die() {
         alive = false;
     }
 }

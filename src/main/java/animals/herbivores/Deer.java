@@ -1,6 +1,5 @@
 package animals.herbivores;
 
-import model.Location;
 
 // Олень
 public class Deer extends Herbivores{

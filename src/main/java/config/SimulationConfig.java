@@ -3,22 +3,22 @@ package config;
 public class SimulationConfig {
     private final int ISLAND_WIDTH;
     private final int ISLAND_HEIGHT;
-    private int plantsCell = 1;
-    private int initialPopulationWolf = 3;
-    private int initialPopulationBear = 2;
-    private int initialPopulationEagle = 5;
-    private int initialPopulationBoa = 4;
-    private int initialPopulationFox = 6;
-    private int initialPopulationBoar = 3;
-    private int initialPopulationBuffalo = 2;
-    private int initialPopulationCaterpillar = 5;
-    private int initialPopulationDeer = 4;
-    private int initialPopulationDuck = 6;
-    private int initialPopulationGoat = 3;
-    private int initialPopulationHorse = 2;
-    private int initialPopulationMouse = 5;
-    private int initialPopulationRabbit = 4;
-    private int initialPopulationSheep = 6;
+    private int plantsCell = 10;
+    private int initialPopulationWolf = 50;
+    private int initialPopulationBear = 50;
+    private int initialPopulationEagle = 50;
+    private int initialPopulationBoa = 50;
+    private int initialPopulationFox = 50;
+    private int initialPopulationBoar = 70;
+    private int initialPopulationBuffalo = 70;
+    private int initialPopulationCaterpillar = 500;
+    private int initialPopulationDeer = 70;
+    private int initialPopulationDuck = 70;
+    private int initialPopulationGoat = 70;
+    private int initialPopulationHorse = 70;
+    private int initialPopulationMouse = 70;
+    private int initialPopulationRabbit = 70;
+    private int initialPopulationSheep = 70;
 
     public int getInitialPopulationBoar() {
         return initialPopulationBoar;

@@ -1,7 +1,5 @@
 package animals.herbivores;
 
-import model.Location;
-
 // Коза
 public class Goat extends Herbivores{
     private static final double WEIGHT = 60;

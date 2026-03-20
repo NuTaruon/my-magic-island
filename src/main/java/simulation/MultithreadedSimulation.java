@@ -9,11 +9,83 @@ import model.Location;
 import plants.Plant;
 
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.*;
 
-public class SimpleSimulation {
-    private final SimulationConfig simulationConfig = new SimulationConfig(10,10);
+public class MultithreadedSimulation {
+    private final SimulationConfig simulationConfig = new SimulationConfig(1000,200);
     private final Island island = new Island(simulationConfig.getISLAND_WIDTH(),simulationConfig.getISLAND_HEIGHT());
+    private final ExecutorService executorService = Executors.newFixedThreadPool(20);
+    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
+    private volatile boolean running = true;
+
+    public void tick() {
+        for (int x = 0; x < island.getWidth(); x++) {
+            for (int y = 0; y < island.getHeight(); y++) {
+                Location location = island.getLocation(x, y);
+                for (int i = 0; i < simulationConfig.getPlantsCell(); i++) {
+                    location.addPlant(new Plant());
+                }
+            }
+        }
+
+        List<Callable<Void>> tasks = new CopyOnWriteArrayList<>();
+        for (int x = 0; x < island.getWidth(); x++) {
+            for (int y = 0; y < island.getHeight(); y++) {
+                Location location = island.getLocation(x, y);
+                int finalX = x;
+                int finalY = y;
+
+                for (Animal animal: location.getAnimals()){
+                            if (!animal.isAlive() || animal.isMoved() || animal.getCurentLocation() == null)
+                                continue;
+                            tasks.add(() -> {
+
+                                animal.eat(animal.getCurentLocation());
+                                if(!(animal instanceof Caterpillar))
+                                animal.movement(island, finalX, finalY);
+                                animal.reproduction(location);
+                                animal.setSaturation(animal.getSaturation() - (animal.getMAX_SATURATION() / 100 * 10));
+                                if (animal.getSaturation() <= 0) {
+                                    animal.die();
+                                    animal.getCurentLocation().removeAnimal(animal);
+                                }
+                                return null;
+                            });
+                }
+            }
+        }
+
+        try {
+            List<Future<Void>> futures = executorService.invokeAll(tasks);
+
+            for (Future<Void> future : futures){
+                    future.get();
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.out.println("Ошибка тика");
+            stop();
+        } catch (ExecutionException e) {
+            System.out.println("Ошибка выполнения действий животного");
+            stop();
+        }
+        island.printStatistic();
+    }
+
+    public void start(){
+        scheduledExecutorService.scheduleAtFixedRate(() ->{
+            if(running) {
+            tick();
+        }
+        }, 0 , 1000, TimeUnit.MILLISECONDS);
+
+    }
+
+    public void stop(){
+        running = false;
+        executorService.shutdown();
+        scheduledExecutorService.shutdown();
+    }
 
     public void initialization() {
 
@@ -103,72 +175,6 @@ public class SimpleSimulation {
                 }
             }
         }
-    island.printStatistic();
-    }
-
-    public void tick() {
-        for (int x = 0; x < island.getWidth(); x++) {
-            for (int y = 0; y < island.getHeight(); y++) {
-                Location location = island.getLocation(x, y);
-                for (int i = 0; i < simulationConfig.getPlantsCell(); i++) {
-                    location.addPlant(new Plant());
-                }
-            }
-        }
-
-        for (int x = 0; x < island.getWidth(); x++) {
-            for (int y = 0; y < island.getHeight(); y++) {
-               Location location = island.getLocation(x,y);
-               List<Animal> animals = List.copyOf(location.getAnimals());
-               for (Animal animal: animals){
-                   if(!animal.isAlive() || animal.isMoved())
-                       continue;
-
-                   if(animal.getSaturation() > 0.00) {
-                       animal.movement(island, x,y);
-                       if(animal.getMAX_SATURATION()/animal.getSaturation() >=1.6) {
-                           animal.eat(location);
-                       }
-                       if(animal.getSaturation() > animal.getMAX_SATURATION()/1.5) {
-                           animal.reproduction(location);
-                       }
-                       animal.setSaturation(animal.getSaturation()-(animal.getMAX_SATURATION()/100*10));
-                       animal.setMoved(true);
-                   } else {
-                       animal.die();
-                       location.removeAnimal(animal);
-                   }
-               }
-            }
-        }
         island.printStatistic();
-        resetIsMoved();
-    }
-
-    public void run(int tick){
-        for (int i = 0; i < tick; i++) {
-            tick();
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    private void resetIsMoved(){
-        for (int x = 0; x < island.getWidth(); x++) {
-            for (int y = 0; y < island.getHeight(); y++) {
-                Location location = island.getLocation(x,y);
-                for (Animal animal : location.getAnimals())
-                    animal.setMoved(false);
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        SimpleSimulation simpleSimulation = new SimpleSimulation();
-        simpleSimulation.initialization();
-        simpleSimulation.run(20);
     }
 }

@@ -2,7 +2,6 @@ package animals.predators;
 
 import animals.Animal;
 import animals.herbivores.*;
-import model.Location;
 
 import java.util.Map;
 
@@ -18,10 +17,5 @@ public class Fox extends Predator{
         super(WEIGHT, SPEED, MAX_SATURATION, MAX_POPULATION_ONE_LOCATION, EATING_PROBABILITY);
     }
 
-
-    @Override
-    public void reproduction(Location location) {
-
-    }
 
 }

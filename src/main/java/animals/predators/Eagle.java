@@ -2,7 +2,6 @@ package animals.predators;
 
 import animals.Animal;
 import animals.herbivores.*;
-import model.Location;
 
 import java.util.Map;
 

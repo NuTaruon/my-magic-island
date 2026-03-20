@@ -1,6 +1,11 @@
 package animals.herbivores;
 
+import animals.Animal;
 import model.Location;
+import plants.Plant;
+
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 // Мышь
 public class Mouse extends Herbivores{
@@ -8,9 +13,42 @@ public class Mouse extends Herbivores{
     private static final int SPEED = 1;
     private static final double MAX_SATURATION = 0.01;
     private static final int MAX_POPULATION_ONE_LOCATION = 500;
+    private static final Map<Class<? extends Animal>,Integer> EATING_PROBABILITY = Map.of(Caterpillar.class, 90);
+
 
     public Mouse() {
         super(WEIGHT, SPEED, MAX_SATURATION, MAX_POPULATION_ONE_LOCATION);
+    }
+    @Override
+    public void eat(Location location) {
+        if (!isAlive())
+            return;
+
+        boolean eating = false;
+        for (Animal animal : location.getAnimals()) {
+            if (animal == this || !animal.isAlive()) continue;
+            Integer prob = EATING_PROBABILITY.get(animal.getClass());
+            if (prob != null && ThreadLocalRandom.current().nextInt(100) < prob) {
+                location.removeAnimal(animal);
+                animal.die();
+                saturation = Math.min(MAX_SATURATION, saturation + animal.getWeight());
+                System.out.println(this.getClass().getSimpleName() + " съел " + animal.getClass().getSimpleName());
+                eating = true;
+                break;
+            }
+        }
+        if (!eating) {
+            if(!isAlive() || location.getPlants() == null)
+                return;
+            for (Plant plant: location.getPlants()) {
+                if (plant != null) {
+                    saturation = Math.min(MAX_SATURATION, saturation + plant.getWeight());
+                    location.removePlant(plant);
+                }
+                else
+                    break;
+            }
+        }
     }
 
 }

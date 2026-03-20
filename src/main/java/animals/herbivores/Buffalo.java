@@ -1,7 +1,5 @@
 package animals.herbivores;
 
-import model.Location;
-
 // Буйвол
 public class Buffalo extends Herbivores{
     private static final double WEIGHT = 700;
@@ -12,5 +10,6 @@ public class Buffalo extends Herbivores{
     public Buffalo() {
         super(WEIGHT, SPEED, MAX_SATURATION, MAX_POPULATION_ONE_LOCATION);
     }
+
 
 }
