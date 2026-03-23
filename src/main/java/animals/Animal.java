@@ -14,7 +14,7 @@ public abstract class Animal {
     protected final double MAX_SATURATION;
     protected final int MAX_POPULATION_ONE_LOCATION;
     protected double saturation;
-    protected boolean alive = true;
+    protected volatile boolean alive = true;
     private boolean isMoved = false;
     private final int CHANGE_REPRODUCTION;
     protected volatile Location curentLocation;

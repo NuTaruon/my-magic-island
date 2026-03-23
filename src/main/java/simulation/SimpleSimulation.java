@@ -149,7 +149,7 @@ public class SimpleSimulation {
         for (int i = 0; i < tick; i++) {
             tick();
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

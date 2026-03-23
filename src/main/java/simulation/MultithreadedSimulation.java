@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.concurrent.*;
 
 public class MultithreadedSimulation {
-    private final SimulationConfig simulationConfig = new SimulationConfig(1000,200);
+    private final SimulationConfig simulationConfig = new SimulationConfig(1000,2000);
     private final Island island = new Island(simulationConfig.getISLAND_WIDTH(),simulationConfig.getISLAND_HEIGHT());
-    private final ExecutorService executorService = Executors.newFixedThreadPool(20);
-    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
+    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     private volatile boolean running = true;
 
     public void tick() {
@@ -39,13 +39,15 @@ public class MultithreadedSimulation {
                             if (!animal.isAlive() || animal.isMoved() || animal.getCurentLocation() == null)
                                 continue;
                             tasks.add(() -> {
-
-                                animal.eat(animal.getCurentLocation());
-                                if(!(animal instanceof Caterpillar))
-                                animal.movement(island, finalX, finalY);
-                                animal.reproduction(location);
-                                animal.setSaturation(animal.getSaturation() - (animal.getMAX_SATURATION() / 100 * 10));
-                                if (animal.getSaturation() <= 0) {
+                                if (animal.getSaturation() > 0) {
+                                    animal.eat(animal.getCurentLocation());
+                                    if (!(animal instanceof Caterpillar)) {
+                                        animal.movement(island, finalX, finalY);
+                                    }
+                                    animal.reproduction(location);
+                                    animal.setSaturation(animal.getSaturation() - (animal.getMAX_SATURATION() / 100 * 10));
+                                }
+                                else{
                                     animal.die();
                                     animal.getCurentLocation().removeAnimal(animal);
                                 }
@@ -77,7 +79,7 @@ public class MultithreadedSimulation {
             if(running) {
             tick();
         }
-        }, 0 , 1000, TimeUnit.MILLISECONDS);
+        }, 0 , 2000, TimeUnit.MILLISECONDS);
 
     }
 

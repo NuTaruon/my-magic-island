@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Класс локация содержит список животных и растений
  **/
 public class Location {
-    private volatile  List<Animal> animals = new CopyOnWriteArrayList<>();
+    private volatile List<Animal> animals = new CopyOnWriteArrayList<>();
     private volatile List<Plant> plants = new CopyOnWriteArrayList<>();
 
     public List<Plant> getPlants() {

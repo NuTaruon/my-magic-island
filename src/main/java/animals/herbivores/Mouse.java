@@ -24,7 +24,6 @@ public class Mouse extends Herbivores{
         if (!isAlive())
             return;
 
-        boolean eating = false;
         for (Animal animal : location.getAnimals()) {
             if (animal == this || !animal.isAlive()) continue;
             Integer prob = EATING_PROBABILITY.get(animal.getClass());
@@ -33,22 +32,21 @@ public class Mouse extends Herbivores{
                 animal.die();
                 saturation = Math.min(MAX_SATURATION, saturation + animal.getWeight());
                 System.out.println(this.getClass().getSimpleName() + " съел " + animal.getClass().getSimpleName());
-                eating = true;
-                break;
+                if(saturation >= MAX_SATURATION)
+                    return;
             }
         }
-        if (!eating) {
-            if(!isAlive() || location.getPlants() == null)
-                return;
-            for (Plant plant: location.getPlants()) {
-                if (plant != null) {
-                    saturation = Math.min(MAX_SATURATION, saturation + plant.getWeight());
-                    location.removePlant(plant);
-                }
-                else
-                    break;
+        if(!isAlive() || location.getPlants() == null || saturation >= MAX_SATURATION)
+            return;
+        for (Plant plant: location.getPlants()) {
+            if (plant != null) {
+                saturation = Math.min(MAX_SATURATION, saturation + plant.getWeight());
+                location.removePlant(plant);
             }
+            else
+                break;
         }
     }
-
 }
+
+

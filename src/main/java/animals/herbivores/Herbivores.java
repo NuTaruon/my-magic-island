@@ -14,7 +14,7 @@ public abstract class Herbivores extends Animal {
 
     @Override
     public void eat(Location location) {
-        if(!isAlive() || location.getPlants() == null)
+        if(!isAlive() || location.getPlants() == null || saturation >= MAX_SATURATION)
             return;
         for (Plant plant: location.getPlants()) {
             if(saturation >= MAX_SATURATION)

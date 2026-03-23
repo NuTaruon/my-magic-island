@@ -28,7 +28,8 @@ public abstract class Predator extends Animal {
                 animal.die();
                 saturation =  Math.min(MAX_SATURATION, saturation + animal.getWeight());
                 System.out.print(" " + this.getClass().getSimpleName() + " съел " + animal.getClass().getSimpleName() + ",");
-                break;
+                if(saturation >= MAX_SATURATION)
+                    return;
             }
         }
     }
